@@ -97,8 +97,8 @@
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
-  @import  "../../common/stylus/mixin"
-  @import  "../../common/stylus/icon"
+  @import "../../common/stylus/mixin"
+  @import "../../common/stylus/icon"
 
   .header
     position: relative

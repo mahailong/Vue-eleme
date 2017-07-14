@@ -12,7 +12,7 @@
           <router-link to="seller">商家</router-link>
         </div>
       </div>
-    <router-view></router-view>
+    <router-view :seller="seller"></router-view>
   </div>
 </template>
 
@@ -49,6 +49,7 @@
 
 <style lang="stylus" rel="stylesheet/stylus">
   @import "./common/stylus/mixin"
+  @import "./common/stylus/base"
 
   .tab
     display: flex
