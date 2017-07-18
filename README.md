@@ -1,21 +1,9 @@
-# sell
+## Vue-eleme
 
-> sell app
+[老师源码地址](https://github.com/ustbhuangyi/vue-sell) 
+ 
+## TODO
 
-## Build Setup
-
-``` bash
-# install dependencies
-npm install
-
-# serve with hot reload at localhost:8080
-npm run dev
-
-# build for production with minification
-npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
-```
-
-For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+- 细化组件
+- 对照饿了么APP写出其他页面
+- 根据饿了么开放api开发服务端
