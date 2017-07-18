@@ -28,8 +28,12 @@
             </div>
           </li>
         </ul>
+        <div class="favorite" @click="toggleFavorite">
+          <span class="icon-favorite" :class="{'active': favorite}"></span>
+          <span class="text">{{favoriteText}}</span>
+        </div>
       </div>
-      <!--<split></split>-->
+      <split></split>
       <div class="bulletin">
         <h1 class="title">公告与活动</h1>
         <div class="content-wrapper border-1px">
@@ -42,14 +46,23 @@
           </li>
         </ul>
       </div>
-      <!--<split></split>-->
+      <split></split>
       <div class="pics">
         <h1 class="title">商家实景</h1>
-        <div class="pic-wrapper">
+        <div class="pic-wrapper" ref="picWrapper">
           <ul class="pic-list">
-            <li class="pic-item"></li>
+            <li class="pic-item" v-for="pic in seller.pics">
+              <img :src="pic" alt="">
+            </li>
           </ul>
         </div>
+      </div>
+      <split></split>
+      <div class="info">
+        <h1 class="title border-1px">商家信息</h1>
+        <ul>
+          <li class="info-item" v-for="info in seller.infos">{{info}}</li>
+        </ul>
       </div>
     </div>
   </div>
@@ -57,8 +70,9 @@
 
 <script>
   import BScroll from 'better-scroll'
+  import {saveToLocal, loadFromLocal} from '@/common/js/util'
   import star from '@/components/star/star'
-  // import split from '@/components/split/split'
+  import split from '@/components/split/split'
   export default {
     props: {
       seller: {
@@ -66,19 +80,53 @@
       }
     },
     components: {
-      // split,
+      split,
       star
+    },
+    data () {
+      return {
+        favorite: (() => {
+          return loadFromLocal(this.seller.id, 'favorite', false)
+        })()
+      }
+    },
+    computed: {
+      favoriteText () {
+        return this.favorite ? '已收藏' : '收藏'
+      }
     },
     created () {
       this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee']
-      this.$nextTick(() => {
-        this.scroll = new BScroll(this.$refs.seller, {click: true})
-      })
+    },
+    watch: {
+      seller () {
+        this._initScroll()
+      }
+    },
+    mounted () {
+      this._initScroll()
+    },
+    methods: {
+      _initScroll () {
+        this.$nextTick(() => {
+          if (!this.scroll) this.scroll = new BScroll(this.$refs.seller, {click: true})
+          else this.scroll.refresh()
+          if (!this.picScroll && this.seller.pics) this.picScroll = new BScroll(this.$refs.picWrapper, {scrollX: true, click: true})
+          else this.picScroll.refresh()
+        })
+      },
+      toggleFavorite (event) {
+        if (event._constructed) {
+          this.favorite = !this.favorite
+          saveToLocal(this.seller.id, 'favorite', this.favorite)
+        }
+      }
     }
   }
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
+
   @import "../../common/stylus/mixin"
   .seller
     position absolute
@@ -128,6 +176,24 @@
             color rgb(7,17,27)
             .stress
               font-size 24px
+      .favorite
+        position absolute
+        right 16px
+        top 18px
+        width 40px
+        text-align center
+        .icon-favorite
+          display block
+          margin-bottom 4px
+          line-height 24px
+          font-size 24px
+          color #d4d6d9
+          &.active
+            color rgb(240,20,20)
+        .text
+          line-height 10px
+          font-size 10px
+          color rgb(77,85,93)
     .bulletin
       padding 18px 18px 0 18px
       .title
@@ -168,4 +234,44 @@
           .text
             line-height: 16px
             font-size: 12px
+    .pics
+      padding 18px 
+      .title
+        margin-bottom 12px
+        line-height 14px
+        color rgb(7,17,27)
+        font-size 14px
+      .pic-wrapper
+        width 100%
+        overflow hidden
+        white-space nowrap
+        .pic-list
+          display: inline-block;
+          font-size 0
+          .pic-item
+            display inline-block
+            margin-right 6px
+            width 120px
+            height 90px
+            img
+              width 100%
+              height 100%
+            &:last-child
+              margin 0
+    .info
+      padding 18px 18px 0 18px
+      .title
+        padding-bottom: 12px
+        line-height 14px
+        border-1px(rgba(7,17,27,0.1))
+        color rgb(7,17,27)
+        font-size 14px
+      .info-item
+        padding 16px 12px
+        border-1px(rgba(7,17,27,0.1))
+        color rgb(7,17,27)
+        font-weight 200
+        font-size 12px
+        &:last-child::after
+          border none
 </style>

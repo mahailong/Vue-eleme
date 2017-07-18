@@ -12,7 +12,9 @@
           <router-link to="seller">商家</router-link>
         </div>
       </div>
-    <router-view :seller="seller"></router-view>
+    <keep-alive>
+      <router-view :seller="seller"></router-view>
+    </keep-alive>
   </div>
 </template>
 
@@ -37,7 +39,7 @@
       this.$http.get('/api/seller?id=' + this.seller.id).then((response) => {
         response = response.body
         if (response.errno === ERR_OK) {
-          this.seller = Object.assign({}, this.seller, response.data)
+          this.seller = {...this.seller, ...response.data}
         }
       })
     },

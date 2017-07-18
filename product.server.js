@@ -40,7 +40,7 @@ apiRoutes.get('/ratings', function(req, res){
 })
 app.use('/api', apiRoutes)
 
-app.use(express.static('../client/dist'))
+app.use(express.static('dist'))
 
 app.listen(port, function(err){
     if (err) {

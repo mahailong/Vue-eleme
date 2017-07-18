@@ -142,7 +142,7 @@
   @import "../../common/stylus/mixin"
 
   .ratings
-    position absoluter
+    position absolute
     top 174px
     bottom 0
     left 0
